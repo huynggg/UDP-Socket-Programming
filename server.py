@@ -4,15 +4,20 @@
 
 from socket import *
 import random
+import sys
 
 # IP is set to local, port 10000
-ipAddress = '127.0.0.1'
-port = 5050
+host = sys.argv[1]
+port = int(sys.argv[2])
 
 # Use UDP(SOCK_DGRAM) socket
 s = socket(AF_INET, SOCK_DGRAM)
 
-s.bind((ipAddress, port))
+s.bind((host, port))
+
+print("Name: Huy Anh Nguyen")
+print("EUID: hn0135")
+print("[server] : ready to accept data...")
 
 while(True):
 
@@ -22,7 +27,10 @@ while(True):
     # Generate a random number form 1-10 to "drop" 30% of the packet
     dropRate = random.randint(1, 10)
 
-    if dropRate  < 4:
+    if dropRate <= 3: # 30% drop rate
+        print("[server] : package dropped")
         continue
     else:
-        s.sendto(data, addr)
+        print("[client] : PING")
+        data = "PONG"
+        s.sendto(data.encode(), addr)
